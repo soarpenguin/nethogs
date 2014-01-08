@@ -1,0 +1,34 @@
+This package was debianized by Bart Martens <bartm@knars.be> on
+Sat, 29 Apr 2006 17:42:35 +0200.
+
+It was downloaded from http://nethogs.sourceforge.net/
+
+Copyright 2004-2005, 2008, 2010-2011 Arnout Engelen <arnouten@bzzt.net>
+
+License:
+
+   This package is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This package is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this package; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+On Debian systems, the complete text of the GNU General
+Public License can be found in `/usr/share/common-licenses/GPL-2'.
+
+The Debian packaging is
+Copyright (c) 2006-2009 Bart Martens <bartm@knars.be>
+and is licensed under the GPL version 2, see above.
+
+The file nethogs.8 contains this:
+  .\" This page Copyright (C) 2004 Fabian Frederick <fabian.frederick@gmx.fr>
+  .\" Content based on Nethogs homepage by Arnout Engelen
+and is assumed to be licensed under the same license as nethogs, so GPL version 2.

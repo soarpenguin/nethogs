@@ -1,0 +1,17 @@
+--- ../orig/nethogs-0.8.0/Makefile	2011-08-27 17:28:50.000000000 +0000
++++ ./Makefile	2011-08-27 17:44:00.000000000 +0000
+@@ -5,10 +5,11 @@
+ #DESTDIR := /usr
+ DESTDIR := /usr/local
+ 
+-sbin  := $(DESTDIR)/sbin
+-man8 := $(DESTDIR)/share/man/man8/
++sbin  := $(DESTDIR)/usr/sbin
++man8 := $(DESTDIR)/usr/share/man/man8/
+ 
+-all: nethogs decpcap_test
++all: nethogs
++# decpcap_test
+ # nethogs_testsum
+ 
+ CFLAGS=-g -Wall -Wextra

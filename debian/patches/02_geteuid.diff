@@ -1,0 +1,11 @@
+--- ../orig/nethogs-0.7.0/nethogs.cpp	2009-03-12 22:28:14.000000000 +0100
++++ ./nethogs.cpp	2009-09-29 20:22:58.000000000 +0200
+@@ -320,7 +320,7 @@
+ 		init_ui();
+ 	}
+ 
+-	if (NEEDROOT && (getuid() != 0))
++	if (NEEDROOT && (geteuid() != 0))
+ 		forceExit("You need to be root to run NetHogs!");
+ 
+ 	char errbuf[PCAP_ERRBUF_SIZE];

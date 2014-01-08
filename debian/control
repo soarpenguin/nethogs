@@ -1,0 +1,15 @@
+Source: nethogs
+Section: net
+Priority: optional
+Maintainer: Bart Martens <bartm@debian.org>
+Build-Depends: debhelper (>= 8.0.0), libncurses5-dev, libpcap0.8-dev
+Standards-Version: 3.9.2
+Homepage: http://nethogs.sourceforge.net/
+
+Package: nethogs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Net top tool grouping bandwidth per process
+ NetHogs is a small 'net top' tool. Instead of breaking the traffic down per
+ protocol or per subnet, like most tools do, it groups bandwidth by process.
+ NetHogs does not rely on a special kernel module to be loaded.

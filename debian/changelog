@@ -1,0 +1,76 @@
+nethogs (0.8.0-1) unstable; urgency=low
+
+  * Switch to dpkg-source 3.0 (quilt) format.
+  * New upstream release.  Closes: #635977.
+  * debian/patches/01_gcc44.diff: Removed.
+  * debian/patches/03_sbin.diff: Removed.
+  * debian/patches/04_makefile.diff: Moved existing change to this patch.
+  * debian/README.Debian-source: Removed.
+
+ -- Bart Martens <bartm@debian.org>  Sat, 27 Aug 2011 17:05:26 +0000
+
+nethogs (0.7.0-3) unstable; urgency=low
+
+  * debian/patches/02_geteuid.diff: Added.  Use geteuid.  Closes: #548093.
+  * debian/patches/03_sbin.diff: Added.  Install the binary in /usr/sbin.
+
+ -- Bart Martens <bartm@debian.org>  Sun, 27 Sep 2009 16:20:41 +0200
+
+nethogs (0.7.0-2) unstable; urgency=low
+
+  * debian/patches/01_gcc44.diff: Added.  Closes: #526208.
+  * debian/watch: Updated.
+
+ -- Bart Martens <bartm@debian.org>  Fri, 01 May 2009 18:18:53 +0200
+
+nethogs (0.7.0-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/control: Fixed package-uses-deprecated-debhelper-compat-version.
+
+ -- Bart Martens <bartm@debian.org>  Fri, 10 Apr 2009 19:21:30 +0200
+
+nethogs (0.6.0+cvs20070620-2) unstable; urgency=low
+
+  * Moving from experimental to unstable.
+  * inode2prog.cpp: Fixed FTBFS by including stdlib.h.
+  * Makefile: Don't build decpcap_test.
+  * connection.cpp: Don't write debug info.  Closes: #444683.
+  * debian/control, debian/rules: Now using cdbs.
+  * debian/dirs: Fixed package-contains-empty-directory usr/sbin/.
+  * nethogs.8: Fixed manpage-has-bad-whatis-entry.
+  * debian/control: Fixed description-contains-homepage.
+
+ -- Bart Martens <bartm@debian.org>  Sat, 08 Mar 2008 18:57:25 +0100
+
+nethogs (0.6.0+cvs20070620-1) experimental; urgency=low
+
+  * New upstream version from upstream cvs.
+  * Includes revision 1.2, closes: #419883.
+  * debian/README.Debian-source: Added.
+  * Updated existing patches.
+  * Makefile: Don't try to build nethogs_testsum.
+  * Makefile: Fixed values of bin and man8.
+  * debian/rule: Edited clean rule.
+
+ -- Bart Martens <bartm@knars.be>  Wed, 20 Jun 2007 11:27:52 +0200
+
+nethogs (0.6.0-3) unstable; urgency=low
+
+  * cui.cpp: Changed for gcc 4.3.  Closes: #417443.  Thanks to Martin
+    Michlmayr <tbm@cyrius.com>.
+
+ -- Bart Martens <bartm@knars.be>  Fri,  6 Apr 2007 17:17:58 +0200
+
+nethogs (0.6.0-2) unstable; urgency=low
+
+  * nethogs.cpp: Fix segfault.  Closes: #405609.
+
+ -- Bart Martens <bartm@knars.be>  Sat,  6 Jan 2007 15:49:12 +0100
+
+nethogs (0.6.0-1) unstable; urgency=low
+
+  * Initial release.  Closes: #271040.
+
+ -- Bart Martens <bartm@knars.be>  Sat, 29 Apr 2006 17:42:35 +0200
+
