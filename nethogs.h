@@ -12,6 +12,8 @@
 
 #define _BSD_SOURCE 1
 
+#define UNUSED(x) UNUSED_ ## x __attribute__((unused))
+
 /* take the average speed over the last 5 seconds */
 #define PERIOD 5
 

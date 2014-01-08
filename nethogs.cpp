@@ -355,6 +355,10 @@ int main (int argc, char** argv)
 
 	signal (SIGALRM, &alarm_cb);
 	signal (SIGINT, &quit_cb);
+ 	signal (SIGQUIT, &quit_cb);
+ 	signal (SIGTERM, &quit_cb);
+ 	signal (SIGHUP, &quit_cb);
+ 	signal (SIGTSTP, &quit_cb);
 	alarm (refreshdelay);
 
 	fprintf(stderr, "Waiting for first packet to arrive (see sourceforge.net bug 1019381)\n");

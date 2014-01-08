@@ -6,7 +6,7 @@
 extern bool needrefresh;
 extern unsigned refreshdelay;
 
-void alarm_cb (int i)
+void alarm_cb (int UNUSED(i))
 {
     needrefresh = true;
     //cout << "Setting needrefresh\n";
