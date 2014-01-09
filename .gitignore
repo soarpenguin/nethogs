@@ -1,0 +1,12 @@
+# Compiled misc
+*.o
+*.lo
+*.so
+
+# Symbol for coding
+/.pc/*
+cscope*
+tags
+
+# Core and executable
+nethogs
