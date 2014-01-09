@@ -13,7 +13,8 @@ int main (int argc, char ** argv)
 {
 	if (argc < 2)
 	{
-		std::cout << "Please, enter a filename" << std::endl;
+                std::cout << "Please, enter a filename" << std::endl;
+                exit (1);
 	}
 
 	char* errbuf = new char[DP_ERRBUF_SIZE];
@@ -23,6 +24,6 @@ int main (int argc, char ** argv)
 	int ret = dp_dispatch (newhandle, -1, NULL, 0);
 	if (ret == -1)
 	{
-		std::cout << "Error dispatching: " << dp_geterr(newhandle);
+                std::cout << "Error dispatching: " << dp_geterr(newhandle);
 	}
 }
