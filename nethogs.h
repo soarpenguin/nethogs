@@ -25,6 +25,8 @@
  * after which a connection is removed */
 #define CONNTIMEOUT 50
 
+#define DEF_DELAY  1.0
+
 /* Set to '0' when compiling for a system that uses Linux Capabilities,
  * like www.adamantix.org: in that case nethogs shouldn't check if it's
  * running as root. Take care to give it sufficient privileges though. */
