@@ -310,7 +310,7 @@ void do_refresh()
 	unsigned int proglen; // max length of the "PROGRAM" column
 
 	getmaxyx(stdscr, row, col);	 /* find the boundaries of the screeen */
-	if (col < 60) {
+	if (col < 60 || row < 10) {
 		clear();
 		mvprintw(0,0, "The terminal is too narrow! Please make it wider.\nI'll wait...");
 		return;
