@@ -12,6 +12,7 @@
 #include <string.h>
 #include <getopt.h>
 #include <stdarg.h>
+#include <termios.h>
 
 #include <netinet/ip.h>
 #include <netinet/ip6.h>
@@ -41,6 +42,10 @@ bool needrefresh = true;
 const char version[] = " version " VERSION "." SUBVERSION "." MINORVERSION;
 
 const char * currentdevice = NULL;
+
+static float  delay_time = DEF_DELAY;  /* how long to sleep between updates  */
+// The original and new terminal attributes
+static struct termios savedtty, rawtty;
 
 timeval curtime;
 
@@ -198,8 +203,11 @@ int process_ip6 (u_char * userdata, const dp_header * /* header */, const u_char
 void quit_cb (int /* i */)
 {
 	procclean();
-	if ((!tracemode) && (!DEBUG))
+
+	if ((!tracemode) && (!DEBUG)) {
+		tcsetattr(STDIN_FILENO, TCSAFLUSH, &savedtty);
 		exit_ui();
+	}
 	exit(0);
 }
 
@@ -239,6 +247,38 @@ static void help(void)
 	std::cerr << " q: quit\n";
 	std::cerr << " m: switch between total and kb/s mode\n";
 
+}
+/*
+ * This routine isolates ALL user INPUT and ensures that we
+ * wont be mixing I/O from stdio and low-level read() requests
+ */
+static int chin(int ech, char *buf, unsigned cnt)
+{
+	int rc;
+
+	fflush(stdout);
+	if (!ech)
+		rc = read(STDIN_FILENO, buf, cnt);
+	else {
+		tcsetattr(STDIN_FILENO, TCSAFLUSH, &savedtty);
+		rc = read(STDIN_FILENO, buf, cnt);
+		tcsetattr(STDIN_FILENO, TCSAFLUSH, &rawtty);
+	}
+	/* may be the beginning of a lengthy escape sequence  */
+	tcflush(STDIN_FILENO, TCIFLUSH);
+
+	return rc;                   /* note: we do NOT produce a vaid 'string' */
+}
+
+/*
+ * Process keyboard input during the main loop
+ */
+static void do_key (unsigned c)
+{
+	switch (c) {
+		case 'q':
+			quit_cb(0);
+	}
 }
 
 class handle {
@@ -370,6 +410,9 @@ int main (int argc, char** argv)
 	while (1)
 	{
 		bool packets_read = false;
+		struct timeval tv;
+		fd_set fs;
+		char c;
 
 		handle * current_handle = handles;
 		while (current_handle != NULL)
@@ -404,9 +447,22 @@ int main (int argc, char** argv)
 
 		// If no packets were read at all this iteration, pause to prevent 100%
 		// CPU utilisation;
-		if (!packets_read)
-		{
-			usleep(100);
+		//if (!packets_read)
+		//{
+		//	usleep(100);
+		//}
+		if (!packets_read) {
+			if ((!DEBUG) && (!tracemode)) {
+				tv.tv_sec = delay_time;
+				tv.tv_usec = (delay_time - (int)delay_time) * 1000000;
+				FD_ZERO(&fs);
+				FD_SET(STDIN_FILENO, &fs);
+				if (0 < select(STDIN_FILENO + 1, &fs, NULL, NULL, &tv)
+						&& 0 < chin(0, &c, 1))
+					do_key((unsigned)c);
+			} else {
+				sleep(delay_time);
+			}
 		}
 	}
 }
