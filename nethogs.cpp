@@ -270,14 +270,31 @@ static int chin(int ech, char *buf, unsigned cnt)
 	return rc;                   /* note: we do NOT produce a vaid 'string' */
 }
 
+#define ROWBUFSIZ 100
+#define PUTP(fmt,arg...) do { \
+           char _str[ROWBUFSIZ]; \
+           snprintf(_str, sizeof(_str), fmt, ## arg); \
+           putp(_str); \
+        } while (0);
+
 /*
  * Process keyboard input during the main loop
  */
-static void do_key (unsigned c)
+static void do_key (unsigned c, bool packets_read)
 {
 	switch (c) {
 		case 'q':
 			quit_cb(0);
+
+		case '\n':          /* just ignore these, they'll have the effect */
+		case ' ':           /* of refreshing display after waking us up ! */
+			break;
+
+		default:
+			fprintf(stderr, "\aUnknown commands!");
+			if (! packets_read) {
+				usleep(1000);	
+			}
 	}
 }
 
@@ -421,36 +438,27 @@ int main (int argc, char** argv)
 			userdata->sa_family = AF_UNSPEC;
 			currentdevice = current_handle->devicename;
 			int retval = dp_dispatch (current_handle->content, -1, (u_char *)userdata, sizeof (struct dpargs));
-			if (retval == -1 || retval == -2)
-			{
+			if (retval == -1 || retval == -2) {
 				std::cerr << "Error dispatching" << std::endl;
-			}
-			else if (retval != 0)
-			{
+			} else if (retval != 0) {
 				packets_read = true;
 			}
 			free (userdata);
 			current_handle = current_handle->next;
 		}
 
-		if ((!DEBUG)&&(!tracemode))
-		{
+		if ((!DEBUG)&&(!tracemode)) {
 			// handle user input
 			ui_tick();
 		}
 
-		if (needrefresh)
-		{
+		if (needrefresh) {
 			do_refresh();
 			needrefresh = false;
 		}
 
 		// If no packets were read at all this iteration, pause to prevent 100%
 		// CPU utilisation;
-		//if (!packets_read)
-		//{
-		//	usleep(100);
-		//}
 		if (!packets_read) {
 			if ((!DEBUG) && (!tracemode)) {
 				tv.tv_sec = delay_time;
@@ -459,7 +467,7 @@ int main (int argc, char** argv)
 				FD_SET(STDIN_FILENO, &fs);
 				if (0 < select(STDIN_FILENO + 1, &fs, NULL, NULL, &tv)
 						&& 0 < chin(0, &c, 1))
-					do_key((unsigned)c);
+					do_key((unsigned)c, packets_read);
 			} else {
 				sleep(delay_time);
 			}
