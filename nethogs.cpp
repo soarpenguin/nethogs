@@ -271,20 +271,91 @@ static int chin(int ech, char *buf, unsigned cnt)
 }
 
 #define ROWBUFSIZ 100
+#define GETBUFSIZ 32
 #define PUTP(fmt,arg...) do { \
            char _str[ROWBUFSIZ]; \
            snprintf(_str, sizeof(_str), fmt, ## arg); \
            putp(_str); \
         } while (0);
 
+static char *strim (int sp, char *str)
+{
+	static const char ws[] = "\b\f\n\r\t\v";
+	char *p;
+
+	if (sp)
+		while ((p = strpbrk(str, ws))) *p = ' ';
+	else
+		if ((p = strpbrk(str, ws))) *p = 0;
+	return str;
+}
+
+/*
+ * Get a string from the user 
+ */
+static char *ask4str (const char *prompt)
+{
+	static char buf[GETBUFSIZ];
+
+	fprintf(stderr, "%s", prompt);
+	memset(buf, '\0', sizeof(buf));
+	chin(1, buf, sizeof(buf) - 1);
+	/* putp(Cap_curs_norm); */
+	return strim(0, buf);
+}
+
+
+/*
+ * Get a float from the user 
+ */
+static float get_float (const char *prompt)
+{
+	char *line;
+	float f;
+
+	if (!(*(line = ask4str(prompt)))) return -1;
+	/* note: we're not allowing negative floats */
+	if (strcspn(line, ",.1234567890")) {
+		fprintf(stderr, "\aNot valid");
+		return -1;
+	}
+	sscanf(line, "%f", &f);
+	return f;
+}
+
+/*
+ * Get an integer from the user 
+ */
+static int get_int (const char *prompt)
+{
+	char *line;
+	int n;
+
+	if (!(*(line = ask4str(prompt)))) return -1;
+	/* note: we've got to allow negative ints (renice)  */
+	if (strcspn(line, "-1234567890")) {
+		fprintf(stderr, "\aNot valid");
+		return -1;
+	}
+	sscanf(line, "%d", &n);
+	return n;
+}
+
 /*
  * Process keyboard input during the main loop
  */
 static void do_key (unsigned c, bool packets_read)
 {
+	int pid;
+
 	switch (c) {
 		case 'q':
 			quit_cb(0);
+
+		case 'p':
+			//pid = get_int("PID to moniter");
+			//fprintf(stderr, "Moniter: %d", pid);
+			break;
 
 		case '\n':          /* just ignore these, they'll have the effect */
 		case ' ':           /* of refreshing display after waking us up ! */
@@ -437,7 +508,8 @@ int main (int argc, char** argv)
 			struct dpargs * userdata = (dpargs *) malloc (sizeof (struct dpargs));
 			userdata->sa_family = AF_UNSPEC;
 			currentdevice = current_handle->devicename;
-			int retval = dp_dispatch (current_handle->content, -1, (u_char *)userdata, sizeof (struct dpargs));
+			int retval = dp_dispatch (current_handle->content, -1, (u_char *)userdata, 
+					sizeof (struct dpargs));
 			if (retval == -1 || retval == -2) {
 				std::cerr << "Error dispatching" << std::endl;
 			} else if (retval != 0) {
